@@ -9,6 +9,8 @@ public class Rocket : MonoBehaviour
 
     // Start is called before the first frame update
     void Awake() {
+
+      // private [SerializeField] rotationSpeed = 5;
         
         rigidBody = GetComponent<Rigidbody>();
     }
@@ -32,12 +34,14 @@ public class Rocket : MonoBehaviour
         if(Input.GetKey(KeyCode.A))
         {
             print("LEFT");
+            transform.Rotate(Vector3.forward);
         }
         
         if(Input.GetKey(KeyCode.D))
         {
         
             print("RIGHT");
+             transform.Rotate(-Vector3.forward);
         
         }
 
