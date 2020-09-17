@@ -7,6 +7,8 @@ public class Rocket : MonoBehaviour
 {
     Rigidbody rigidBody;
     AudioSource thrustAudio;
+    [SerializeField] float rotationSpeed = 100f;
+    [SerializeField] float thrustPower = 200f;
 
     // Start is called before the first frame update
     void Awake() {
@@ -19,19 +21,17 @@ public class Rocket : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ProcessInput();
-        
-        
+        Thrust();
+        Rotate();
     }
-    
-    private void ProcessInput()
+
+    private void Thrust()
     {
-       
-        if(Input.GetKey(KeyCode.Space) || 
-           Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.Space) ||
+                   Input.GetKey(KeyCode.W))
         {
-            rigidBody.AddRelativeForce(Vector3.up);
-            if(!thrustAudio.isPlaying)
+            rigidBody.AddRelativeForce(Vector3.up * thrustPower);
+            if (!thrustAudio.isPlaying)
             {
                 thrustAudio.Play();
             }
@@ -40,16 +40,25 @@ public class Rocket : MonoBehaviour
         {
             thrustAudio.Stop();
         }
-        if(Input.GetKey(KeyCode.A))
+    }
+    
+    private void Rotate()
+    {
+        rigidBody.freezeRotation = true; // take manual control of rotation
+
+        float rotationThisFrame = rotationSpeed * Time.deltaTime;
+
+        if (Input.GetKey(KeyCode.A))
         {
-            transform.Rotate(Vector3.forward);
+            transform.Rotate(Vector3.forward * rotationThisFrame);
         }
-        
-        if(Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.D))
         {
-             transform.Rotate(-Vector3.forward);
-        
+            transform.Rotate(-Vector3.forward * rotationThisFrame);
         }
 
+        rigidBody.freezeRotation = false; // let unity physics continue rotation
+
     }
+
 }
